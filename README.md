@@ -11,10 +11,14 @@ A full-stack password manager application built with React (Vite) on the fronten
 - Settings and theme support
 
 ## 🧱 Tech Stack
-- Frontend: React, Vite, CSS
-- Backend: Node.js, Express
-- Database: MongoDB (or your DB if different)
-- Security: Encryption utilities (crypto-based)
+- React (Frontend)
+- Node.js + Express (Backend)
+- MySQL (Database)
+- Redis (Caching)
+- WordPress (CMS demo)
+- phpMyAdmin (DB management)
+- Nginx (Reverse proxy)
+- Docker Compose (Container orchestration)
 
 ## 📁 Project Structure
 - `/src` - Frontend React app
