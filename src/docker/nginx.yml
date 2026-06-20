@@ -1,0 +1,12 @@
+services:
+  loadbalancer:
+    image: nginx:latest
+    restart: always
+    depends_on:
+      - wordpress
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - app_network

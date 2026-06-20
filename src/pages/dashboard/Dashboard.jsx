@@ -1,41 +1,57 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaMoon, FaSun } from 'react-icons/fa';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { useAuth } from '@clerk/clerk-react';
-import './dashboard.css';
-import { FaMoon, FaSun } from 'react-icons/fa';
 import { ThemeContext } from '../../context/ThemeContext';
+import './dashboard.css';
+
+// ✅ API URL from environment variable
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const [entries, setEntries] = useState(() => {
     const stored = localStorage.getItem('passwords');
     return stored ? JSON.parse(stored) : [];
   });
-  const [newEntry, setNewEntry] = useState({ name: '', username: '', password: '' });
+
+  const [newEntry, setNewEntry] = useState({
+    name: '',
+    username: '',
+    password: '',
+  });
+
   const [showPasswords, setShowPasswords] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const formRef = useRef(null);
 
-  const { getToken } = useAuth(); // 🔐 Clerk token access
+  const { getToken } = useAuth();
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     localStorage.setItem('passwords', JSON.stringify(entries));
   }, [entries]);
 
   const handleChange = (e) => {
-    setNewEntry({ ...newEntry, [e.target.name]: e.target.value });
+    setNewEntry({
+      ...newEntry,
+      [e.target.name]: e.target.value,
+    });
   };
 
+  // ✅ Updated submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const updatedEntries = [...entries, newEntry];
     setEntries(updatedEntries);
 
-    // 🔐 Send to backend with Clerk auth
     try {
       const token = await getToken();
-      const res = await fetch('http://localhost:5000/api/passwords', {
+
+      const res = await fetch(`${API_URL}/api/passwords`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +66,12 @@ const Dashboard = () => {
       console.error('Failed to save to backend:', err);
     }
 
-    setNewEntry({ name: '', username: '', password: '' });
+    setNewEntry({
+      name: '',
+      username: '',
+      password: '',
+    });
+
     alert('🎉 Password Saved!');
   };
 
@@ -72,20 +93,29 @@ const Dashboard = () => {
     entry.name.toLowerCase().includes(searchTerm)
   );
 
-  const { theme, toggleTheme} = useContext(ThemeContext);
-
   return (
     <div className="dashboard-wrapper">
-      <button className="hamburger" onClick={() => setSidebarOpen(true)}>
+      <button
+        className="hamburger"
+        onClick={() => setSidebarOpen(true)}
+      >
         <FaBars />
       </button>
 
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <div className="dashboard-container">
         <div className="header">
           <h1 className="dashboard-title">🔐 TAS-PASS</h1>
-          <button onClick={toggleTheme} className="theme-toggle-icon" title="Toggle Theme">
+
+          <button
+            onClick={toggleTheme}
+            className="theme-toggle-icon"
+            title="Toggle Theme"
+          >
             {theme === 'dark' ? <FaSun /> : <FaMoon />}
           </button>
         </div>
@@ -98,29 +128,53 @@ const Dashboard = () => {
             onChange={handleSearch}
             className="search-bar form"
           />
-          <button onClick={scrollToForm} className="add-btn">
+
+          <button
+            onClick={scrollToForm}
+            className="add-btn"
+          >
             ➕ Add New
           </button>
         </div>
 
         <div className="password-section">
           <h2>🔒 Stored Passwords</h2>
-          <button onClick={() => setShowPasswords(!showPasswords)} className="toggle-btn all_buttons" >
-            {showPasswords ? '🙈 Hide Passwords' : '👁️ Show Passwords'}
+
+          <button
+            onClick={() => setShowPasswords(!showPasswords)}
+            className="toggle-btn all_buttons"
+          >
+            {showPasswords
+              ? '🙈 Hide Passwords'
+              : '👁️ Show Passwords'}
           </button>
 
           <div className="entries">
             {filteredEntries.length === 0 ? (
-              <p className="no-entries">No matching passwords found.</p>
+              <p className="no-entries">
+                No matching passwords found.
+              </p>
             ) : (
               filteredEntries.map((entry, index) => (
-                <div key={index} className={`entry theme-${index % 4}`}>
+                <div
+                  key={index}
+                  className={`entry theme-${index % 4}`}
+                >
                   <h3>{entry.name}</h3>
+
                   <p>👤 {entry.username}</p>
+
                   <p>
-                    🔑 {showPasswords ? entry.password : '*'.repeat(entry.password.length)}
+                    🔑{' '}
+                    {showPasswords
+                      ? entry.password
+                      : '*'.repeat(entry.password.length)}
                   </p>
-                  <button className="delete-btn" onClick={() => handleDelete(index)}>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(index)}
+                  >
                     ❌
                   </button>
                 </div>
@@ -129,37 +183,52 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="form-section" ref={formRef}>
+        <div
+          className="form-section"
+          ref={formRef}
+        >
           <h2>Add New Entry</h2>
-          <form onSubmit={handleSubmit} className="form">
+
+          <form
+            onSubmit={handleSubmit}
+            className="form"
+          >
             <input
               type="text"
               name="name"
-              className='form_input'
+              className="form_input"
               placeholder="Website Name"
               value={newEntry.name}
               onChange={handleChange}
               required
             />
+
             <input
               type="text"
               name="username"
-              className='form_input'
+              className="form_input"
               placeholder="Username or Email"
               value={newEntry.username}
               onChange={handleChange}
               required
             />
+
             <input
               type="password"
               name="password"
-              className='form_input'
+              className="form_input"
               placeholder="Password"
               value={newEntry.password}
               onChange={handleChange}
               required
             />
-            <button type="submit" className='all_buttons'>💾 Save Password</button>
+
+            <button
+              type="submit"
+              className="all_buttons"
+            >
+              💾 Save Password
+            </button>
           </form>
         </div>
       </div>

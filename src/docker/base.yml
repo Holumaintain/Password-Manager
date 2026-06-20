@@ -1,0 +1,9 @@
+services: {}
+
+volumes:
+  db_data:
+  wordpress_data:
+
+networks:
+  app_network:
+    driver: bridge
