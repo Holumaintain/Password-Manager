@@ -74,3 +74,12 @@
 # networks:
 #   wordpress_network:
 #     driver: bridge
+
+# VITE_CLERK_PUBLISHABLE_KEY=pk_test_Y29uY2lzZS1tdXN0YW5nLTMuY2xlcmsuYWNjb3VudHMuZGV2JA
+# VITE_API_URL=http://localhost:5000
+# NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_Y29uY2lzZS1tdXN0YW5nLTMuY2xlcmsuYWNjb3VudHMuZGV2JA
+# CLERK_SECRET_KEY=sk_test_haF7DGltnZPsGBDnFCWoI9IlGrbZmm3l8E93k0mgoe
+
+# CLERK_SECRET_KEY=sk_test_haF7DGltnZPsGBDnFCWoI9IlGrbZmm3l8E93k0mgoe
+# DATABASE_URL=mongodb+srv://<username>:<password>@cluster-name.08029632889Olu.mongodb.net/passwordManagerDB?retryWrites=true&w=majority
+# ENCRYPTION_KEY=5666c8eb2f5b6d05130115680dee4937bf5cad636e4f6a8e4fe467b9b87c5d4e
