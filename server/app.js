@@ -22,6 +22,6 @@ mongoose.connect(process.env.DATABASE_URL)
   .catch(err => console.error('MongoDB error:', err));
 
 // Debug log
-console.log('CLERK KEY:', process.env.CLERK_API_KEY);
+console.log('CLERK KEY:', process.env.CLERK_SECRET_KEY);
 console.log('ENCRYPTION KEY:', process.env.ENCRYPTION_KEY);
 console.log('DATABASE URL:', process.env.DATABASE_URL);

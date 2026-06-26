@@ -9,6 +9,8 @@ import { ThemeProvider } from './context/ThemeContext'; // ✅ Correct for named
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
+console.log("CLERK PUB KEY:", clerkPubKey);
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider>

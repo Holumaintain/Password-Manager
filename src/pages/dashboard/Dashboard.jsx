@@ -9,6 +9,8 @@ import './dashboard.css';
 const API_URL =
   import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+console.log("API_URL =", API_URL);
+
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -60,19 +62,30 @@ const Dashboard = () => {
         body: JSON.stringify(newEntry),
       });
 
+      // ✅ Check if the request was successful
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      // ✅ Log backend response
       const data = await res.json();
       console.log('Server response:', data);
+
+      // ✅ Success message
+      alert('🎉 Password Saved!');
+
+      // ✅ Clear the form only after a successful save
+      setNewEntry({
+        name: '',
+        username: '',
+        password: '',
+      });
     } catch (err) {
-      console.error('Failed to save to backend:', err);
+      console.error(err);
+
+      // ❌ Show error if the backend request failed
+      alert('❌ Failed to save password.');
     }
-
-    setNewEntry({
-      name: '',
-      username: '',
-      password: '',
-    });
-
-    alert('🎉 Password Saved!');
   };
 
   const handleDelete = (index) => {
